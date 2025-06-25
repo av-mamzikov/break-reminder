@@ -2,15 +2,6 @@
 # from their computer screen. It creates a popup window that reminds users to stand up, stretch, 
 # and rest their eyes from screen time, helping to prevent eye strain and physical discomfort 
 # associated with prolonged computer use.
-# To run from Windows Task Scheduler:
-# 1. Open Task Scheduler (taskschd.msc)
-# 2. Click "Create Basic Task"
-# 3. Enter a name and description, then click Next
-# 4. Set your desired trigger (e.g., Daily, At login), then click Next
-# 5. Select "Start a program" and click Next
-# 6. In Program/script field enter: powershell.exe
-# 7. In Add arguments field enter: -ExecutionPolicy Bypass -File "C:\path\to\break-reminder.ps1"
-# 8. Click Next, review the settings, and click Finish
 
 #Requires -Version 5.1
 
@@ -44,7 +35,7 @@ $localizationDir = Join-Path -Path $scriptDir -ChildPath "localization"
 # If ListLanguages switch is used, display available languages and exit
 if ($ListLanguages) {
     Write-Host "Available languages:"
-    Get-ChildItem -Path $localizationDir -Filter "*.psd1" | ForEach-Object {
+    Get-ChildItem -Path $localizationDir -Filter "*.xml" | ForEach-Object {
         $langCode = [System.IO.Path]::GetFileNameWithoutExtension($_.Name)
         Write-Host "  $langCode"
     }
@@ -57,26 +48,33 @@ if ([string]::IsNullOrEmpty($Language)) {
     $Language = (Get-Culture).Name
 }
 
+# Default strings (English)
+$strings = @{
+    WindowTitle = "Break Reminder"
+    ReminderMessage = "Take a break! Stand up, stretch, and rest your eyes from the screen."
+    CloseButtonText = "Close"
+}
+
 # Check if the language file exists, otherwise fall back to en-US
-$languageFile = Join-Path -Path $localizationDir -ChildPath "$Language.psd1"
+$languageFile = Join-Path -Path $localizationDir -ChildPath "$Language.xml"
 if (-not (Test-Path $languageFile)) {
     Write-Host "Language '$Language' not found. Falling back to en-US."
     $Language = "en-US"
-    $languageFile = Join-Path -Path $localizationDir -ChildPath "$Language.psd1"
-    
-    # If even en-US doesn't exist, create a basic version
-    if (-not (Test-Path $languageFile)) {
-        $defaultStrings = @{
-            WindowTitle = "Break Reminder"
-            ReminderMessage = "Take a break! Stand up, stretch, and rest your eyes from the screen."
-            CloseButtonText = "Close"
-        }
-        $defaultStrings | Export-Clixml -Path $languageFile
-    }
+    $languageFile = Join-Path -Path $localizationDir -ChildPath "$Language.xml"
 }
 
-# Import the language strings
-$strings = Import-LocalizedData -BaseDirectory $localizationDir -FileName "$Language.psd1"
+# Load the language strings from XML if the file exists
+if (Test-Path $languageFile) {
+    try {
+        [xml]$xmlDoc = Get-Content -Path $languageFile -Encoding UTF8
+        $strings.WindowTitle = $xmlDoc.SelectSingleNode("//string[@name='WindowTitle']").InnerText
+        $strings.ReminderMessage = $xmlDoc.SelectSingleNode("//string[@name='ReminderMessage']").InnerText
+        $strings.CloseButtonText = $xmlDoc.SelectSingleNode("//string[@name='CloseButtonText']").InnerText
+    }
+    catch {
+        Write-Warning "Error loading language file: $_"
+    }
+}
 
 # Create the form
 $Form = New-Object Windows.Forms.Form

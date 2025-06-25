@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="WindowTitle">Напоминание</string>
+  <string name="ReminderMessage">Сделай перерыв!
+
+Встань, разомнись, отдохни от экрана.</string>
+  <string name="CloseButtonText">Иду отдыхать!</string>
+</resources>

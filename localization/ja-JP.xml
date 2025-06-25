@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="WindowTitle">休憩リマインダー</string>
+  <string name="ReminderMessage">休憩しましょう！
+
+立ち上がって、ストレッチをして、画面から目を休めてください。</string>
+  <string name="CloseButtonText">休憩します！</string>
+</resources>
