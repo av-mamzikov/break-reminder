@@ -6,7 +6,7 @@ A PowerShell script that displays reminder notifications prompting users to take
 
 ## Screenshots
 
-![Russian Break Reminder](screenshots/image.png)
+![English Break Reminder](screenshots/image.png)
 
 ### Other Languages
 The application supports 8 languages in total! See the Features section for the complete list.
