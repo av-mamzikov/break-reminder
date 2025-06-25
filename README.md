@@ -48,7 +48,7 @@ The application supports 8 languages in total! See the Features section for the 
 
 ### Easy Installation (Recommended)
 
-1. Download the latest release from the [Releases page](https://github.com/av-mamzikov/break-reminder/releases)
+1. Download the latest release from the [Releases page](https://github.com/av-mamzikov/break-reminder/releases) (Source code zip)
 2. Extract the ZIP file to any location
 3. Double-click the `Install-BreakReminder.bat` file
 4. Follow the on-screen instructions to:
