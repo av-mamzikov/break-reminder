@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="WindowTitle">Recordatorio de Descanso</string>
+  <string name="ReminderMessage">¡Toma un descanso!
+
+Levántate, estírate y descansa la vista de la pantalla.</string>
+  <string name="CloseButtonText">¡Voy a descansar!</string>
+</resources>
