@@ -6,13 +6,15 @@ A lightweight application that displays reminder notifications prompting users t
 
 ## Screenshots
 
-PowerShell version:
+### PowerShell version:
+
 ![powershell version](screenshots/ps.png)
 
-VBScript version:
+### VBScript version:
+
 ![VbScript version](screenshots/vb.png)
 
-### Other Languages
+### Languages
 The application supports 8 languages in total! See the Features section for the complete list.
 
 ## Features
