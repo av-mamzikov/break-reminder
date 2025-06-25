@@ -39,7 +39,7 @@ The application supports 8 languages in total! See the Features section for the 
 
 1. Download the latest release from the [Releases page](https://github.com/av-mamzikov/break-reminder/releases)
 2. Extract the ZIP file to any location
-3. Run the `install.ps1` script by right-clicking and selecting "Run with PowerShell"
+3. Double-click the `Install-BreakReminder.bat` file
 4. Follow the on-screen instructions to:
    - Install the application to your user profile
    - Create an optional desktop shortcut
