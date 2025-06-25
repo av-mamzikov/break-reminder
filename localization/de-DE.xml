@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <string name="WindowTitle">Pausenerinnerung</string>
+  <string name="ReminderMessage">Mach eine Pause!
+
+Steh auf, streck dich und gönn deinen Augen eine Auszeit vom Bildschirm.</string>
+  <string name="CloseButtonText">Ich mache Pause!</string>
+</resources>
