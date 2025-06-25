@@ -1,0 +1,27 @@
+# Windows system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# PowerShell
+*.ps1.log
+*.ps1.error
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Temporary files
+*~
+*.bak
+*.tmp
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+
+# Ignore temporary comment files created during development
+break-reminder-comment.txt
+break-reminder-purpose.txt
