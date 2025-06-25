@@ -9,54 +9,121 @@
 # 4. Set your desired trigger (e.g., Daily, At login), then click Next
 # 5. Select "Start a program" and click Next
 # 6. In Program/script field enter: powershell.exe
-# 7. In Add arguments field enter: -ExecutionPolicy Bypass -File "C:\Users\amamzikov\Scripts\break-reminder.ps1"
+# 7. In Add arguments field enter: -ExecutionPolicy Bypass -File "C:\path\to\break-reminder.ps1"
 # 8. Click Next, review the settings, and click Finish
 
 #Requires -Version 5.1
+
+param (
+    [string]$Language = "",
+    [switch]$ListLanguages
+)
 
 # Set encoding for the current session
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $OutputEncoding = [System.Text.Encoding]::UTF8
 Add-Type -AssemblyName System.Windows.Forms
 
+# Function to get the script directory regardless of where it's run from
+function Get-ScriptDirectory {
+    $scriptPath = $MyInvocation.MyCommand.Path
+    if (!$scriptPath) { $scriptPath = $script:MyInvocation.MyCommand.Path }
+    if (!$scriptPath) { $scriptPath = $PSCommandPath }
+    if ($scriptPath) {
+        return Split-Path -Parent $scriptPath
+    } else {
+        Write-Warning "Could not determine script directory"
+        return $pwd.Path
+    }
+}
+
+# Get the script directory
+$scriptDir = Get-ScriptDirectory
+$localizationDir = Join-Path -Path $scriptDir -ChildPath "localization"
+
+# If ListLanguages switch is used, display available languages and exit
+if ($ListLanguages) {
+    Write-Host "Available languages:"
+    Get-ChildItem -Path $localizationDir -Filter "*.psd1" | ForEach-Object {
+        $langCode = [System.IO.Path]::GetFileNameWithoutExtension($_.Name)
+        Write-Host "  $langCode"
+    }
+    exit
+}
+
+# Determine which language to use
+if ([string]::IsNullOrEmpty($Language)) {
+    # Use system language if no language specified
+    $Language = (Get-Culture).Name
+}
+
+# Check if the language file exists, otherwise fall back to en-US
+$languageFile = Join-Path -Path $localizationDir -ChildPath "$Language.psd1"
+if (-not (Test-Path $languageFile)) {
+    Write-Host "Language '$Language' not found. Falling back to en-US."
+    $Language = "en-US"
+    $languageFile = Join-Path -Path $localizationDir -ChildPath "$Language.psd1"
+    
+    # If even en-US doesn't exist, create a basic version
+    if (-not (Test-Path $languageFile)) {
+        $defaultStrings = @{
+            WindowTitle = "Break Reminder"
+            ReminderMessage = "Take a break! Stand up, stretch, and rest your eyes from the screen."
+            CloseButtonText = "Close"
+        }
+        $defaultStrings | Export-Clixml -Path $languageFile
+    }
+}
+
+# Import the language strings
+$strings = Import-LocalizedData -BaseDirectory $localizationDir -FileName "$Language.psd1"
+
 # Create the form
 $Form = New-Object Windows.Forms.Form
-$Form.Text = "Напоминание"
+$Form.Text = $strings.WindowTitle
 $Form.TopMost = $true
 $Form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
 $Form.StartPosition = [System.Windows.Forms.FormStartPosition]::CenterScreen
-$Form.MinimumSize = New-Object System.Drawing.Size(300, 100)
+$Form.MinimumSize = New-Object System.Drawing.Size(400, 80)
+$Form.MaximumSize = New-Object System.Drawing.Size(500, 250)
 
 # Create a TableLayoutPanel for better content arrangement
 $TableLayout = New-Object System.Windows.Forms.TableLayoutPanel
 $TableLayout.Dock = [System.Windows.Forms.DockStyle]::Fill
 $TableLayout.AutoSize = $true
 $TableLayout.AutoSizeMode = [System.Windows.Forms.AutoSizeMode]::GrowAndShrink
-$TableLayout.Padding = New-Object System.Windows.Forms.Padding(20)
+$TableLayout.Padding = New-Object System.Windows.Forms.Padding(20, 10, 20, 10)
 $TableLayout.RowCount = 2
 $TableLayout.ColumnCount = 1
 [void]$TableLayout.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-[void]$TableLayout.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 80)))
-[void]$TableLayout.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 20)))
+[void]$TableLayout.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 70)))
+[void]$TableLayout.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 30)))
 
 # Create the label
 $Label = New-Object Windows.Forms.Label
-$Label.Text = "Сделай перерыв! Встань, разомнись, отдохни от экрана."
+$Label.Text = $strings.ReminderMessage
 $Label.AutoSize = $true
-$Label.Font = New-Object System.Drawing.Font("Arial", 15, [System.Drawing.FontStyle]::Bold)
+$Label.Font = New-Object System.Drawing.Font("Arial", 12, [System.Drawing.FontStyle]::Bold)
+$Label.TextAlign = [System.Drawing.ContentAlignment]::MiddleCenter
+$Label.Dock = [System.Windows.Forms.DockStyle]::Fill
 $Label.Anchor = [System.Windows.Forms.AnchorStyles]::None
+
+# Create a close button
+$CloseButton = New-Object Windows.Forms.Button
+$CloseButton.Text = $strings.CloseButtonText
+$CloseButton.Font = New-Object System.Drawing.Font("Arial", 12, [System.Drawing.FontStyle]::Bold)
+$CloseButton.Dock = [System.Windows.Forms.DockStyle]::Fill
+$CloseButton.AutoSize = $false
+$CloseButton.Height = 40
+$CloseButton.Padding = New-Object System.Windows.Forms.Padding(5)
+$CloseButton.Margin = New-Object System.Windows.Forms.Padding(20, 5, 20, 5)
+$CloseButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Standard
+$CloseButton.BackColor = [System.Drawing.Color]::LightSkyBlue
+$CloseButton.ForeColor = [System.Drawing.Color]::Black
+$CloseButton.Add_Click({ $Form.Close() })
 
 # Add the label to the table layout
 $TableLayout.Controls.Add($Label, 0, 0)
-
-# Create a close button
-$CloseButton = New-Object System.Windows.Forms.Button
-$CloseButton.Text = "Пойду разомнусь!"
-$CloseButton.AutoSize = $true
-$CloseButton.Anchor = [System.Windows.Forms.AnchorStyles]::None
-$CloseButton.Font = New-Object System.Drawing.Font("Arial", 12, [System.Drawing.FontStyle]::Bold)
-$CloseButton.FlatStyle = [System.Windows.Forms.FlatStyle]::System
-$CloseButton.Add_Click({ $Form.Close() })
 
 # Add the button to the table layout
 $TableLayout.Controls.Add($CloseButton, 0, 1)
@@ -68,4 +135,5 @@ $Form.Controls.Add($TableLayout)
 $Form.AutoSize = $true
 $Form.AutoSizeMode = [System.Windows.Forms.AutoSizeMode]::GrowAndShrink
 
+# Show the form
 $Form.ShowDialog()
