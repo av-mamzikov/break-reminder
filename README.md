@@ -6,7 +6,10 @@ A lightweight application that displays reminder notifications prompting users t
 
 ## Screenshots
 
+PowerShell version:
 ![powershell version](screenshots/ps.png)
+
+VBScript version:
 ![VbScript version](screenshots/vb.png)
 
 ### Other Languages
