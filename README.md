@@ -40,7 +40,7 @@ The application supports 8 languages in total! See the Features section for the 
 ## Requirements
 
 - Windows operating system
-- For PowerShell version: PowerShell 5.1 or higher
+- For PowerShell version: PowerShell 5.1 or higher (included in Windows 11 and can be installed to windows 10)
 - For VBScript version: Windows Script Host (included in all Windows versions)
 - No additional dependencies required
 
