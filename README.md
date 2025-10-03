@@ -13,10 +13,13 @@ The application supports 8 languages in total! See the Features section for the 
 
 ## Features
 
-- Simple, non-intrusive reminder popup with OK/Cancel buttons
-- OK button acknowledges the break
-- Cancel button opens Task Scheduler to change reminder schedule
-- Configurable message and appearance
+- Simple, non-intrusive reminder popup with Yes/No buttons
+- **Yes button** - Acknowledge the break and close
+- **No button** - Opens Task Scheduler to change reminder schedule
+- **X button** - Just closes without opening scheduler
+- Language-independent Task Scheduler activation
+- Configurable reminder intervals (1 hour, 2 hours, or custom)
+- **Minute offset selection** - Choose specific minute within the hour (e.g., :00, :15, :30, :45)
 - Easy to schedule with Windows Task Scheduler
 - **Extensive language support** (8 languages):
   - English (en-US)
@@ -44,10 +47,12 @@ The application supports 8 languages in total! See the Features section for the 
 2. Extract the ZIP file to any location
 3. Double-click the `Install-BreakReminder.bat` file
 4. Follow the on-screen instructions to:
-   - Install the application to your user profile
+   - Install the application to your user profile (`%LOCALAPPDATA%\BreakReminder`)
    - Create an optional desktop shortcut
-   - Set up automatic reminders at your preferred interval
+   - Set up automatic reminders at your preferred interval (1 hour, 2 hours, or custom)
+   - Choose specific minute within the hour for reminders (e.g., :45 for quarter to the hour)
    - Select your preferred language
+   - Uninstaller is automatically copied to installation directory
 
 ### Manual Installation
 
@@ -99,12 +104,18 @@ To set up reminders manually:
 
 To remove Break Reminder from your system:
 
-1. Double-click the `Uninstall-BreakReminder.bat` file
-2. Confirm the uninstallation
-3. The uninstaller will:
-   - Remove all scheduled tasks
+1. Navigate to `%LOCALAPPDATA%\BreakReminder` or use the path shown during installation
+2. Double-click the `Uninstall-BreakReminder.bat` file
+3. Confirm the uninstallation
+4. The uninstaller will safely:
+   - Remove all scheduled tasks (BreakReminder_*)
    - Delete the desktop shortcut
    - Remove the installation directory
+   
+**Safety Features:**
+- Multiple validation checks prevent accidental deletion of wrong directories
+- Verifies the directory contains Break Reminder files before deletion
+- Protects system directories from accidental removal
 
 ## Customization
 
@@ -115,7 +126,7 @@ You can modify the script to change:
 
 ### Adding a New Language
 
-1. Create a new XML file in the `localization` folder with the culture code as filename (e.g., `fr-FR.xml`)
+1. Create a new XML file in the `localization` folder with the culture code as filename (e.g., `it-IT.xml`)
 2. Use this template:
    ```xml
    <?xml version="1.0" encoding="UTF-8"?>
@@ -123,11 +134,14 @@ You can modify the script to change:
      <string name="WindowTitle">Break Reminder</string>
      <string name="ReminderMessage">Take a break!
 
-Stand up, stretch, and rest your eyes from the screen.</string>
+Stand up, stretch, and rest your eyes from the screen.
+
+Yes - I'm taking a break
+No - Change schedule</string>
      <string name="CloseButtonText">Taking a break!</string>
    </resources>
    ```
-3. Translate the values to your target language
+3. Translate the values to your target language (including button descriptions)
 4. Make sure to save the file with UTF-8 encoding to ensure proper display of special characters
 
 ## License
