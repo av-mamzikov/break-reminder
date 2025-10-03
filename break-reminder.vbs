@@ -95,9 +95,9 @@ End Sub
 
 Sub CreateReminderPopup()
     Dim result
-    result = MsgBox(reminderMessage, vbOKCancel + vbInformation + vbSystemModal, windowTitle)
+    result = MsgBox(reminderMessage, vbYesNo + vbQuestion + vbSystemModal, windowTitle)
     
-    If result = vbCancel Then
+    If result = vbNo Then
         WshShell.Run "taskschd.msc /s", 1, False        
         WScript.Sleep 1000
         On Error Resume Next
