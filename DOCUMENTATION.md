@@ -4,25 +4,21 @@
 
 Break Reminder is a lightweight application designed to help users maintain healthy computer usage habits by providing timely reminders to take breaks. Regular breaks help prevent eye strain, repetitive strain injuries, and other health issues associated with prolonged computer use.
 
-The application comes in two versions (PowerShell and VBScript) and supports multiple languages through a flexible XML-based localization system that automatically detects the user's system language.
+The application is built with VBScript and supports multiple languages through a flexible XML-based localization system that automatically detects the user's system language.
 
 ## Technical Details
 
-### Application Versions
+### Application Version
 
-#### PowerShell Version
-The PowerShell version uses Windows Forms to create a custom GUI notification with:
-- A main form window that appears on top of other applications
-- A message label with the break reminder text
-- A close button to dismiss the notification
-- TableLayoutPanel for proper element arrangement
-
-#### VBScript Version
-The VBScript version uses a simple message box dialog:
+#### VBScript Implementation
+The application uses a simple message box dialog with:
 - No visible console window
 - Standard Windows message box (MsgBox function)
 - System modal dialog that stays on top of other windows
-- Simple interface with a single OK button
+- OK/Cancel buttons for user interaction:
+  - **OK button**: User acknowledges the break reminder
+  - **Cancel button**: Opens Windows Task Scheduler to modify the reminder schedule
+- Language-independent Task Scheduler activation using process name (mmc.exe)
 
 ### Localization System
 
@@ -37,8 +33,7 @@ The application implements a robust localization system:
 ### System Requirements
 
 - Windows operating system
-- For PowerShell version: PowerShell 5.1 or higher
-- For VBScript version: Windows Script Host (included in all Windows versions)
+- Windows Script Host (included in all Windows versions)
 - No additional dependencies required
 
 ### Encoding
@@ -47,55 +42,32 @@ The script uses UTF-8 encoding to properly display non-ASCII characters in the r
 
 ## Configuration Options
 
-### Unified Installer
+### Installer
 
-The unified installer (`install.ps1`) provides several configuration options:
-- Choose between PowerShell or VBScript version
+The installer (`install.ps1`) provides several configuration options:
 - Create desktop shortcuts
 - Set up scheduled tasks with customizable intervals
 - Select preferred language
 
-### Customizing the PowerShell Version
+### Customizing the VBScript Version
 
-You can modify the following aspects of the PowerShell script by editing the corresponding sections:
+You can modify the following aspects by editing the VBScript:
 
 #### Reminder Message
 
-To change the reminder message, modify the XML localization files or modify the `$Label.Text` property in the script:
+To change the reminder message, modify the XML localization files in the `localization` directory.
 
-```powershell
-$Label.Text = "Your custom reminder message here"
+#### Button Behavior
+
+The Cancel button opens Task Scheduler. You can modify the command in the script:
+```vbscript
+WshShell.Run "taskschd.msc /s", 1, False
 ```
-
-### Window Appearance
-
-You can customize the window appearance by modifying these properties:
-- `$Form.Text` - The window title
-- `$Form.MinimumSize` - The minimum window size
-- `$Form.FormBorderStyle` - The border style of the window
-- `$Form.TopMost` - Whether the window stays on top of other windows
-
-### Font and Styling
-
-To change the font or styling of the message:
-- Modify the font properties in the script where fonts are defined
-- Adjust padding and margins in the TableLayoutPanel settings
 
 ## Advanced Usage
 
 ### Language Parameters
 
-#### PowerShell Version
-The PowerShell script accepts the following parameters for language customization:
-
-```powershell
-param (
-    [string]$Language = "",  # Specify a language code (e.g., "en-US", "fr-FR")
-    [switch]$ListLanguages    # List all available languages
-)
-```
-
-#### VBScript Version
 The VBScript accepts a language code as a command-line argument:
 
 ```
@@ -104,16 +76,6 @@ wscript.exe "path\to\break-reminder.vbs" fr-FR
 
 ### Examples
 
-#### PowerShell Version
-```powershell
-# Run with system language (default)
-.\break-reminder.ps1
-
-# Run with a specific language
-.\break-reminder.ps1 -Language fr-FR
-```
-
-#### VBScript Version
 ```
 # Run with system language (default)
 wscript.exe "path\to\break-reminder.vbs"
@@ -122,30 +84,6 @@ wscript.exe "path\to\break-reminder.vbs"
 wscript.exe "path\to\break-reminder.vbs" fr-FR
 ```
 
-### Additional Parameters
-
-You can extend the script to accept more parameters for customization:
-
-```powershell
-param(
-    [string]$Language = "",
-    [switch]$ListLanguages,
-    [string]$Message = "Default message",
-    [int]$DisplayTime = 60
-)
-```
-
-### Adding Auto-Close Functionality
-
-To make the reminder automatically close after a certain time:
-
-```powershell
-# Add this after form creation
-$Timer = New-Object System.Windows.Forms.Timer
-$Timer.Interval = 60000  # 60 seconds
-$Timer.Add_Tick({ $Form.Close(); $Timer.Stop() })
-$Timer.Start()
-```
 
 ## Localization Guide
 
@@ -195,31 +133,26 @@ Each language file is an XML file (`.xml`) containing string resources. The elem
 
 ### Common Issues
 
-1. **PowerShell script won't run due to execution policy**
-   - Solution: Use `-ExecutionPolicy Bypass` when running from Task Scheduler
-
-2. **Window doesn't appear**
+1. **Window doesn't appear**
    - Check if the application is running with proper permissions
    - Verify the script isn't being blocked by security software
-
-3. **Text displays incorrectly**
+2. **Text displays incorrectly**
    - Ensure the XML localization files are saved with UTF-8 encoding
-   - For VBScript, make sure you're using MSXML2.DOMDocument.6.0 which supports Unicode
+   - Make sure you're using MSXML2.DOMDocument.6.0 which supports Unicode
    
-4. **Language not working**
+3. **Language not working**
    - Verify the language file exists in the `localization` directory
    - Check that the language code is correct (e.g., "en-US", not "en")
    - Ensure the language file contains all required string elements
    
-5. **Scheduled task not working**
-   - Make sure you have administrator privileges when creating scheduled tasks
-   - Check the task settings in Task Scheduler
+4. **Task Scheduler doesn't come to foreground**
+   - The script uses `AppActivate "mmc.exe"` to bring Task Scheduler to front
+   - This is language-independent and works across all Windows versions
 
 ## Future Enhancements
 
 Potential improvements for future versions:
 - Configuration file for easy customization
-- Sound notifications
 - Customizable reminder intervals
 - Statistics tracking for breaks taken/skipped
 - Additional language translations
