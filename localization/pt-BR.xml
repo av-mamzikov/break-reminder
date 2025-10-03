@@ -3,6 +3,9 @@
   <string name="WindowTitle">Lembrete de Pausa</string>
   <string name="ReminderMessage">Faça uma pausa!
 
-Levante-se, alongue-se e descanse os olhos da tela.</string>
+Levante-se, alongue-se e descanse os olhos da tela.
+
+OK - Vou fazer uma pausa
+Cancelar - Alterar agendamento</string>
   <string name="CloseButtonText">Vou fazer uma pausa!</string>
 </resources>

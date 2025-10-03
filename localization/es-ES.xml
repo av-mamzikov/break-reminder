@@ -3,6 +3,9 @@
   <string name="WindowTitle">Recordatorio de Descanso</string>
   <string name="ReminderMessage">¡Toma un descanso!
 
-Levántate, estírate y descansa la vista de la pantalla.</string>
+Levántate, estírate y descansa la vista de la pantalla.
+
+Aceptar - Voy a descansar
+Cancelar - Cambiar horario</string>
   <string name="CloseButtonText">¡Voy a descansar!</string>
 </resources>
