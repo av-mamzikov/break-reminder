@@ -3,6 +3,9 @@
   <string name="WindowTitle">Напоминание</string>
   <string name="ReminderMessage">Сделай перерыв!
 
-Встань, разомнись, отдохни от экрана.</string>
+Встань, разомнись, отдохни от экрана.
+
+ОК - Иду отдыхать
+Отмена - Изменить расписание</string>
   <string name="CloseButtonText">Иду отдыхать!</string>
 </resources>

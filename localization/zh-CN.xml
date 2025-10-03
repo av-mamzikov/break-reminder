@@ -3,6 +3,9 @@
   <string name="WindowTitle">休息提醒</string>
   <string name="ReminderMessage">该休息了！
 
-站起来，伸展一下，让眼睛远离屏幕。</string>
+站起来，伸展一下，让眼睛远离屏幕。
+
+确定 - 我去休息
+取消 - 更改计划</string>
   <string name="CloseButtonText">我去休息！</string>
 </resources>

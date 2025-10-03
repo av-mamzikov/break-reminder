@@ -3,6 +3,9 @@
   <string name="WindowTitle">Rappel de pause</string>
   <string name="ReminderMessage">Faites une pause !
 
-Levez-vous, étirez-vous, et reposez vos yeux de l'écran.</string>
+Levez-vous, étirez-vous, et reposez vos yeux de l'écran.
+
+OK - Je prends une pause
+Annuler - Modifier l'horaire</string>
   <string name="CloseButtonText">Je prends une pause !</string>
 </resources>

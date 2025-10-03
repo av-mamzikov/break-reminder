@@ -3,6 +3,9 @@
   <string name="WindowTitle">休憩リマインダー</string>
   <string name="ReminderMessage">休憩しましょう！
 
-立ち上がって、ストレッチをして、画面から目を休めてください。</string>
+立ち上がって、ストレッチをして、画面から目を休めてください。
+
+OK - 休憩します
+キャンセル - スケジュールを変更</string>
   <string name="CloseButtonText">休憩します！</string>
 </resources>

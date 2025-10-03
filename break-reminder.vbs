@@ -93,11 +93,15 @@ Sub LoadLocalizedStrings(lang)
     End If
 End Sub
 
-' Function to create a custom popup with MsgBox
 Sub CreateReminderPopup()
-    ' Create a simple message box
-    ' vbOKOnly (0) + vbInformation (64) + vbSystemModal (4096) = 4160
-    ' vbSystemModal makes the dialog stay on top
     Dim result
-    result = MsgBox(reminderMessage, 4160, windowTitle)
+    result = MsgBox(reminderMessage, vbOKCancel + vbInformation + vbSystemModal, windowTitle)
+    
+    If result = vbCancel Then
+        WshShell.Run "taskschd.msc /s", 1, False        
+        WScript.Sleep 1000
+        On Error Resume Next
+        WshShell.AppActivate "mmc.exe"
+        On Error GoTo 0
+    End If
 End Sub

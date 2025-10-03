@@ -3,6 +3,9 @@
   <string name="WindowTitle">Pausenerinnerung</string>
   <string name="ReminderMessage">Mach eine Pause!
 
-Steh auf, streck dich und gönn deinen Augen eine Auszeit vom Bildschirm.</string>
+Steh auf, streck dich und gönn deinen Augen eine Auszeit vom Bildschirm.
+
+OK - Ich mache Pause
+Abbrechen - Zeitplan ändern</string>
   <string name="CloseButtonText">Ich mache Pause!</string>
 </resources>
